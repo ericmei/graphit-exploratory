@@ -1,0 +1,73 @@
+element Vertex end
+element Edge end
+element HierarchicalNSW end
+
+const visited : vector{Vertex}(int) = 0;
+const mass : vector{Vertex}(int) = 0;
+
+const edges : edgeset{Edge}(Vertex,Vertex) = load (argv[1]);
+const vertices : vertexset{Vertex} = edges.getVertices();
+const out_degree : vector {Vertex}(int) = edges.getOutDegrees();
+
+const defaultEfConstruction : int = 1024;
+const defaultEfSearch : int = 128;
+const defaultM : int = 32;
+const defaultTopK : int = 1;
+
+%{
+ef - the size of the dynamic list for the nearest neighbors (used during the search). 
+Higher ef leads to more accurate but slower search. ef cannot be set lower than the 
+number of queried nearest neighbors k. The value ef of can be anything between k and 
+the size of the dataset.
+
+k number of nearest neighbors to be returned as the result. The knn_query function 
+returns two numpy arrays, containing labels and distances to the k found nearest 
+elements for the queries. Note that in case the algorithm is not be able to find 
+k neighbors to all of the queries, (this can be due to problems with graph or 
+k>size of the dataset) an exception is thrown.
+%}
+
+func nnSearch(curV: int, enterpointNode: int,
+         queryData: float, k: int)
+    var currObj : int = enterpointNode;
+end
+
+func getInnerProduct(v: Vertex)
+    
+end
+
+func reset(v: Vertex)
+    visited[v] = 0;
+    mass[v] = 0;
+end
+
+func searchBaseLayerST(curV: int, dist_calc: int,
+                       currObj: int, queryData: float, ef: int)
+
+    var n : int = edges.getVertices();
+
+    var visitedNodePool : vertexset{Vertex} = new vertexset{Vertex}(0);
+
+
+
+    var visitedPool : vertexset{Vertex} = new vertexset{Vertex}(n);
+    vertices.apply(reset);
+
+    
+    %used to be array of masses; now put masses on each node
+    var massVisited : vertexset{Vertex} = new vertexset{Vertex}(n);
+    
+    var currentV : int = curV;
+    
+    var topResults : vertexset{Vertex} = new vertexset{Vertex}(n);
+    var candidateSet : vertexset{Vertex} = new vertexset{Vertex}(n);
+
+
+
+    getInnerProduct(currObj, queryData, )
+    
+end
+
+func main()
+
+end

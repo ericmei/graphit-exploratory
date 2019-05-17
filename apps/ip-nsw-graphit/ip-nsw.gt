@@ -1,0 +1,55 @@
+element Vertex end
+element Edge end
+element HierarchicalNSW end
+const edges : edgeset{Edge}(Vertex,Vertex) = load (argv[1]);
+const vertices : vertexset{Vertex} = edges.getVertices();
+const old_rank : vector{Vertex}(double) = 1.0/vertices.size();
+const new_rank : vector{Vertex}(double) = 0.0;
+const out_degree : vector {Vertex}(int) = edges.getOutDegrees();
+const contrib : vector{Vertex}(double) = 0.0;
+const error : vector{Vertex}(double) = 0.0;
+const damp : double = 0.85;
+const beta_score : double = (1.0 - damp) / vertices.size();
+
+const defaultEfConstruction : int = 1024;
+const defaultEfSearch : int = 128;
+const defaultM : int = 32;
+const defaultTopK : int = 1;
+
+%{
+func getRandomLevel(revSize: double)
+    uniform_real_distribution(0.0, 1.0);
+end
+%}
+
+func addPointToHNSW(max_elements: int, cur_element_count: int, mult_: double,
+                    label: int, level : int)
+    var cur_c : int = 0;
+    if cur_element_count >= max_elements
+        print "The number of elements exceeds the specified limit\n";
+    end
+    cur_c = cur_element_count;
+    
+end
+
+
+
+func main()
+    var graphname : string; 
+    var mode : string;
+    var outputname : string;
+    var dataname : string;
+    var queryname : string;
+
+    var efConstruction : int = defaultEfConstruction;
+    var efSearch : int = defaultEfSearch;
+    var M : int = defaultM;
+    var vecsize : int = -1;
+    var qsize : int = -1;
+    var vecdim : int = -1;
+    var topK : int = defaultTopK;
+    
+
+
+end
+

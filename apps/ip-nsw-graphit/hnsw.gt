@@ -1,0 +1,160 @@
+element Vertex end
+element Edge end
+element hnsw end
+
+extern func get_max_layer(normFactor: double) -> output: int;
+extern func get_rand_int(min:int, max: int) -> output: int;
+
+const edges : edgeset{Edge}(Vertex,Vertex) = load ("../../test/graphs/4.el");
+const vertices : vertexset{Vertex} = edges.getVertices();
+const parent : vector{Vertex}(int) = -1;
+const dist_from_given_query : vector{Vertex}(double) = 1.79769e+308; %max out the double
+
+%change the size of the incoming vector as needed
+const vectorSize : int = 20;
+const location : vector{Vertex}(vector[20](double));
+
+%graphit cannot detect const vectorSize below, so the below does not work
+%const error_vec : vector{Vertex}(vector[vectorSize](double));
+
+func printVertex(v: Vertex)
+    print v;
+end
+
+func printEdge(src: Vertex, dst: Vertex)
+    print(src);
+    print(dst);
+    print "";
+end
+
+func reset_dist_from_given_query(v : Vertex)
+    dist_from_given_query[v] = 0;
+end
+
+func getInnerProduct(firstElem: Vertex, secondElem: Vertex) -> distance : double
+    %both firstElem and secondElem should be of the same size
+    distance = 1.0;
+
+    %this is only if the vertex has a location denoted by a vector   
+    %{
+    for dimensionLoc in 0:vectorSize          %(location[firstElem]).size()
+        distance = distance - (location[firstElem][dimensionLoc] * location[secondElem][dimensionLoc]);
+    end
+    %}
+    
+    %otherwise, it will just be vertex of singular int
+    distance = distance - (location[firstElem] * location[secondElem]);
+
+end
+
+func setNearestNeighborsValues(currentLayer: vertexset{Vertex})
+    
+    %need to be able to set the value of every distance from this query element to every
+    %vertex in the currentLayer
+    %however, there is nothing to keep track of the queryElement from a global standpoint
+    
+     dist_from_given_query[v] = getInnerProduct(v)
+
+end
+
+func getGreedyKNN(queryElement: Vertex, currentLayer: vertexset{Vertex})
+    currentLayer.apply(setNearestNeighborsValues)
+    %then iterate over these vertices distances to find the top N 
+
+    %reset the distance when done
+    currentLayer.apply(reset_dist_from_given_query) 
+end
+
+func searchBaseLayer(queryElement: Vertex, enterPoint: Vertex, layerNum: int)
+    var visitedVertices : vertexset{Vertex};
+    var topCandidates: list{Vertex} = new list{Vertex}();
+    var candidateSet : list{Vertex} = new list{Vertex}();
+    var currentEntryDistance : double = getInnerProduct(queryElement, enterPoint);
+
+    while (candidateSet.size() > 0) %both list and vector size is not available?!?!? the only available functions for list
+                                    %are append, pop, and transpose
+                                    %and it is not possible to pop off vertexset, so how to decrease candidateSet...
+        var currentEL : vertex = candidiateSet.pop();
+        if (-currentEL > currentEntryDistance)
+            break;
+        end
+
+        candidateSet.pop();
+
+        if (layerNum == 0)
+            getGreedyKNN(queryElement);
+        end
+            
+        else 
+            var currentData : int; %set to enter into lower layer; TODO after figure out how to denote multilayer graph
+        end
+
+    end
+    visitedVertices.addVertex(enterPoint);
+
+    var distance : double = getInnerProduct(enterPoint, queryElement);
+end
+
+%{
+func insertPointToHNSW(queryElement: Vertex, numEstablishedConnections : int, maxNumConnections: int, 
+                       candidateListSize: int, normFactor: float)
+    var currentNN : list{vertexset{Vertex}} = new list{vertexset{Vertex}}();
+    var enterPoint : int = 0; %here, we take a numerical value instead of a vertex to start with as a seed vertex 
+
+    var topLevel : int = 0; %top layer of hnsw will start at 0
+    
+    %the distribution used is from 0.0 to 1.0
+    var newElementLevel : int =  get_max_layer(normFactor);
+
+    %for numLayer in topLevel: (newElementLevel + 1)
+    %    searchLayer(queryElement, ) TODO WHEN SEARCH KNN IS SOLVED
+    %end
+end
+
+
+func searchLayer(queryElement: Vertex, enterPoint: Vertex, numNearestElem: int, layerNum: int) -> top_candidates : vertexset{Vertex}    
+    top_candidates = enterPoints;
+    var visitedElements : vertexset{Vertex} = enterPoints;
+    %var nearest_neighbors_list : list{Vertex} = new list{Vertex}();
+    %nearest_neighbors_list.append(enterPoints);
+    
+    
+    while candidates.size() > 0        
+        %var closestElement : Vertex = getNearestNeighbor(candidates, queryElement);
+        %var furthestElement : Vertex = getFurthestElement(nearest_neighbors_list, queryElement);
+        if getInnerProduct(queryElement, closestElement) > getInnerProduct(furthestElement, closestElement)
+            break;
+        end
+    end     
+    
+    var results : list{vertexset{Vertex}} = new list{vertexset{Vertex}}();
+    
+    %chunk down the nearest neighbors to be only the closest k elements
+    while (top_candidates.size() > k)
+        top_candidates.pop_back();  %popping does not exist for vertexset in this graphit implementation
+    end
+end
+%}
+
+%the returned list will be in order of the closest to furthest elements from the query element
+func selectNeighborsSimple(queryElement: vertex, candidates: vertexset{Vertex}, numNeighborsToReturn: int) -> nearestNeighbors : list{Vertex}
+    
+    %since we do not have access to priority queues, we are forced to use lists 
+    %this will take n^2 time instead of n log n
+    %TODO: figure out how to place these vertices into a priority queue-esque structure
+
+    %var nearestNeighbors : list{Vertex} = new list{Vertex}();
+    
+    if numNeighborsToReturn < (candidates.getVertexSetSize())   
+        %chunk down the nearest neighbors to be only the closest numNeighborsToReturn elements
+        %while (nearestNeighbors.size() > numNeighborsToReturn)
+        %    nearestNeighbors.pop();
+        %end   
+    end
+    
+end
+
+func main()
+    
+
+end

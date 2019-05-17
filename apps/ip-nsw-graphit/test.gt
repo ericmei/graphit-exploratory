@@ -1,0 +1,157 @@
+element Vertex end
+element Edge end 
+
+const edges : edgeset{Edge}(Vertex,Vertex) = load ("../../test/graphs/4.el");
+
+const vertices : vertexset{Vertex} = edges.getVertices();
+
+const parent : vector{Vertex}(int) = -1;
+% const parent : vector{Vertex}(Vertex) = -1;
+const currentDistanceToQuery : vector{Vertex}(double) = -1;
+
+const test_vec : vector{Vertex}(vector[20](double));
+
+func updateEdge(src : Vertex, dst : Vertex)
+    parent[dst] = src;
+end
+
+func toFilter(v : Vertex) -> output : bool
+    output =  parent[v] == -1;
+end
+
+func printParent(v: Vertex)
+    print parent[v];
+end
+
+func printVertex(v: Vertex)
+    print (v);
+end
+
+func printGraph(allVertices: vertexset{Vertex})
+    print "The graph has vertices: ";
+    
+    %allVertices.apply(printParent);
+    print " ";
+end
+
+func printEdge(src : Vertex, dst : Vertex)
+    print(src);
+    print(dst);
+    print "";
+end
+
+func printEdgeWeighted(src : Vertex, dst : Vertex, weight : int)
+    print(src);
+    print(dst);
+    print(weight);
+    print "";
+end
+
+%{ broken code
+func printVertex(v: Vertex)
+    print (v);
+end
+
+
+func getInnerProduct(firstElem: Vertex, secondElem: Vertex) -> distance : double
+    %both firstElem and secondElem should be of the same size
+    distance = 1.0;
+
+    %this is only if the vertex has a location denoted by a vector   
+    %{
+    for dimensionLoc in 0:vectorSize          %(location[firstElem]).size()
+        distance = distance - (location[firstElem][dimensionLoc] * location[secondElem][dimensionLoc]);
+    end
+    %}
+    
+    %otherwise, it will just be vertex of singular int
+    distance = distance - (location[firstElem] * location[secondElem]);
+
+end
+
+func setDistanceValueToQuery(v: Vertex)
+    currentDistanceToQuery[v] = 
+end
+
+func setDistanceToCurrentQuery()
+
+end
+
+func main()
+	var frontier : vertexset{Vertex} = new vertexset{Vertex}(0);
+    frontier.addVertex(8);
+	frontier.apply(printVertex);
+end	
+%}
+
+func main()
+
+%    startTimer();
+    var frontier : vertexset{Vertex} = new vertexset{Vertex}(0);
+    frontier.addVertex(8);
+
+
+    parent[8] = 8;
+    print(frontier.getVertexSetSize());
+    print "The frontier contains";
+    %frontier.apply(printVertex);
+    %printGraph(frontier);
+   
+    var test1 : vertexset{Vertex} = new vertexset{Vertex}(0);
+    var test2 : vertexset{Vertex} = new vertexset{Vertex}(0);
+    var test3 : vertexset{Vertex} = new vertexset{Vertex}(0);
+
+    const error_vec : vector{Vertex}(vector[20](double));
+
+    
+    %var frontier : vector{} = new vector{Vertex}(0);
+
+    %hnsw.push_back(test1);
+    %hnsw.push_back(test2);
+    %hnsw.push_back(test3);
+
+    %var multiLevel : vector{Vertex}(list{vertexset{Vertex}} );
+
+    print "The graph has edges: ";
+    edges.apply(printEdge);
+    print " ";
+
+    while (frontier.getVertexSetSize() != 0)
+%        print "size";
+%        print frontier.getVertexSetSize();
+         var output : vertexset{Vertex} = edges.from(frontier).to(toFilter).applyModified(updateEdge, parent);
+         delete frontier;
+         frontier = output;
+    end
+    delete frontier;
+
+
+    var verticesTestAdd : vertexset{Vertex} = frontier;
+    verticesTestAdd.addVertex(123432);
+
+        
+    print "Here is the test print vertices";
+    %verticesTestAdd.apply(printVertex);
+    print " ";
+
+    vertices.apply(printParent);
+
+%    var elapsed_time : float = stopTimer();
+%    print "elapsed time: ";
+%    print elapsed_time;
+
+
+    var testOrdering : vertexset{Vertex} = new vertexset{Vertex}(0);
+    testOrdering.addVertex(1);
+    testOrdering.addVertex(2);
+    testOrdering.addVertex(3);
+    
+    var test_edges : edgeset{Edge}(Vertex,Vertex, int); 
+    test_edges= load ("../../test/graphs/test.wel");
+    
+    test_edge.apply()
+
+    %test_edges.apply(printEdge);
+    %currentDistanceToQuery[v]
+
+end
