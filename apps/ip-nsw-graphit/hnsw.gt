@@ -4,6 +4,7 @@ element hnsw end
 
 extern func get_max_layer(normFactor: double) -> output: int;
 extern func get_rand_int(min:int, max: int) -> output: int;
+extern func get_rand_level(revSize: double) -> output: int;
 
 const edges : edgeset{Edge}(Vertex,Vertex) = load ("../../test/graphs/4.el");
 const vertices : vertexset{Vertex} = edges.getVertices();
@@ -13,6 +14,11 @@ const dist_from_given_query : vector{Vertex}(double) = 1.79769e+308; %max out th
 %change the size of the incoming vector as needed
 const vectorSize : int = 20;
 const location : vector{Vertex}(vector[20](double));
+
+const defaultEfConstruction : int = 1024;
+const defaultEfSearch : int = 128;
+const defaultM : int = 32;
+const defaultTopK : int = 1;
 
 %graphit cannot detect const vectorSize below, so the below does not work
 %const error_vec : vector{Vertex}(vector[vectorSize](double));
@@ -154,7 +160,31 @@ func selectNeighborsSimple(queryElement: vertex, candidates: vertexset{Vertex}, 
     
 end
 
+func addPointToHNSW(queryElement: Vertex, label: int, level: int, mult: double, elementLevels: vector)
+    level = -1;
+    var currentElementCount : int = 0;
+    var currentLevel : int = get_rand_level(mult);
+
+    if level > 0
+        currentLevel = level;
+    end
+
+    elementLevels[currentElementCount] = currentLevel;
+end
+
 func main()
-    
+    var vecsize : int = argv[2];
+    var vecdim : int = argv[3];
+
+    var efConstruction : int = defaultEfConstruction;
+    var efSearch : int = defaultEfSearch;
+    var M : int = defaultM;
+    var topK : int = defaultTopK;
+    var mult : double = 1 / log(1.0 * M);
+    var revSize : double = 1.0 / mult;
+
+    var hnsw : vertexset{Vertex} = new vertexset{Vertex}(0);
+    var massQ : vector[vecsize * vecdim](float);
+
 
 end

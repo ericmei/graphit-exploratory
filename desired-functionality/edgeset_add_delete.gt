@@ -1,0 +1,19 @@
+element Vertex end
+element Edge end
+
+const edges : edgeset{Edge}(Vertex,Vertex) = load (argv[1]);
+const vertices : vertexset{Vertex} = edges.getVertices();
+
+%right now, it is only possible to load into edgeset
+
+%it is inefficient to have to create a new edgeset every time you want to make a modification
+%what if you are trying to insert an element into the edgeset for later calculation?
+%this would function as a true set if implemented
+
+func addEdge(src: Vertex, dest: Vertex)
+   edges.add(src, dest); %if this edge already exists, then it should just not do anything
+end
+
+func deleteEdge(src: Vertex, dest: Vertex)
+   edges.delete(src, dest); %if this edge does not currently exist, then it should just not do anything. otherwise, delete edge from edgeset
+end

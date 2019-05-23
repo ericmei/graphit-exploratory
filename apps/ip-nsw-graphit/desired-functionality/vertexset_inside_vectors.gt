@@ -1,5 +1,0 @@
-element Vertex end
-
-%currently not possible because vectors cannot parse graphit native types 
-%motivation is being able to create a multi-layered graph, where each layer is accessable in constant time
-const multiLevel : vector{Vertex}(vector[1](vertexset{Vertex}));

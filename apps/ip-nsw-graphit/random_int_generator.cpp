@@ -2,6 +2,8 @@
 #include <iostream>
 #include <random>
 
+using namespace std;
+
 int get_rand_int(int min, int max) {
 	int n = max - min + 1;
 	int remainder = RAND_MAX % n;
