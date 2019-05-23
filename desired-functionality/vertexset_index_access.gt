@@ -1,0 +1,21 @@
+element Vertex end
+element Edge end
+
+const edges : edgeset{Edge}(Vertex,Vertex) = load (argv[1]);
+const vertices : vertexset{Vertex} = edges.getVertices();
+
+%we would be able to stop functions on vertexset upon reaching a certain criteria 
+%we could granularly access each vertex in the vertexset through simple iteration
+%we would be able to mock a global variable vertex by placing it in a vertexset and accessing the first value in 
+%the vertexset
+
+func main()
+    var visited : vertexset{Vertex} = new vertexset{Vertex}(0);
+    var start_vertex : int = 8;
+    print(visited[0]);   %you should be able to access the first available value in the vertexset
+
+end
+
+func main()
+    
+end
