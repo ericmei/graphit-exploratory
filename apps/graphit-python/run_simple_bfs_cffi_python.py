@@ -5,8 +5,6 @@ from cffi import FFI
 
 ffi = FFI()
 
-#clib = ffi.dlopen('_simplebfs_cffi')
-
 class run_bfs():
     def __init__(self):
         self.bfs = _simplebfs_cffi.ffi.new("struct run_bfs*", None)
