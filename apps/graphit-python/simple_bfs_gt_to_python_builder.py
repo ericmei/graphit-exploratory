@@ -5,7 +5,8 @@ ffibuilder = FFI()
 
 basePath = os.path.dirname(__file__)
 filePath = os.path.abspath(os.path.join(basePath, "..", "..", "build/bin/simple_bfs.cpp"))
-#print(filePath)
+compiledSimpleBFSFilePath = os.path.abspath(os.path.join(basePath, "..", "..", "build/bin/simple_bfs.cpp"))
+
 
 runtimePath = os.path.abspath(os.path.join(basePath, "..", "..", "src/runtime_lib"))
 intrinsicsPath = os.path.abspath(os.path.join(basePath, "..", "..", "src/runtime_lib/intrinsics.h"))
@@ -13,11 +14,17 @@ intrinsicsPath = os.path.abspath(os.path.join(basePath, "..", "..", "src/runtime
 print("This is runtimepath")
 print(runtimePath)
 
-with open(filePath,'r') as f:
+with open(filePath,'rb') as f:
+    #externFunction = "r'''extern \"C\" {} {} {}'''".format('{', f.read(), '}')
+    #print(externFunction)
+
     ffibuilder.set_source("_simplebfs_cffi",
-                          f.read(),
+                          #r'''extern "C" {}{}{}'''.format('{', f.read(), '}'),
+                          #f.read(),
+                          r'''extern "C" {}''',
                           include_dirs=[runtimePath],
                           source_extension = ".cpp",
+                          libraries=['simple_bfs'],
                           extra_compile_args = ["-std=c++11"]
 )
 
